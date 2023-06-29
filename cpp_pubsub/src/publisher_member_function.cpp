@@ -25,26 +25,28 @@ using namespace std::chrono_literals;
 /* This example creates a subclass of Node and uses std::bind() to register a
  * member function as a callback from the timer. */
 
+//no korean language pack..... holy..
+
 class MinimalPublisher : public rclcpp::Node
 {
 public:
   MinimalPublisher()
   : Node("minimal_publisher"), count_(0)
   {
-    publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
+    publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10); //Publisher init. define message type, topic name. queue size.
     timer_ = this->create_wall_timer(
-      500ms, std::bind(&MinimalPublisher::timer_callback, this));
+      1000ms, std::bind(&MinimalPublisher::timer_callback, this)); // 1hz timer callback. callback function name is <timer_callback>
   }
 
 private:
   void timer_callback()
   {
-    auto message = std_msgs::msg::String();
+    auto message = std_msgs::msg::String(); //define message.
     message.data = "Hello, world! " + std::to_string(count_++);
-    RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
-    publisher_->publish(message);
+    RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str()); //similar to ROS_INFO.
+    publisher_->publish(message); //publish!
   }
-  rclcpp::TimerBase::SharedPtr timer_;
+  rclcpp::TimerBase::SharedPtr timer_; //timer class? I don't know...
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
   size_t count_;
 };
@@ -52,7 +54,7 @@ private:
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<MinimalPublisher>());
+  rclcpp::spin(std::make_shared<MinimalPublisher>()); //Just spin class "MinimalPublisher"
   rclcpp::shutdown();
   return 0;
 }

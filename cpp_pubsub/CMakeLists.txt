@@ -10,6 +10,7 @@ find_package(ament_cmake REQUIRED)
 
 	find_package(rclcpp REQUIRED)
 	find_package(std_msgs REQUIRED)	#두줄 추가하래서 했습니다.
+	find_package(geometry_msgs REQUIRED)
 	
 # uncomment the following section in order to fill in
 # further dependencies manually.
@@ -49,7 +50,15 @@ ament_package()
 	  DESTINATION lib/${PROJECT_NAME})
 
 
-
+	add_executable(turtlesim_mover src/turtlesim_mover.cpp)
+	ament_target_dependencies(turtlesim_mover
+	"rclcpp" 
+	"std_msgs"
+	"geometry_msgs"
+	)
+	install(TARGETS
+	  turtlesim_mover
+	  DESTINATION lib/${PROJECT_NAME})
 
 
 
